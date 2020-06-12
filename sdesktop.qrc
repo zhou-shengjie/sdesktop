@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/login.qml</file>
+        <file>pic/code.png</file>
+        <file>pic/loginBg.jpg</file>
+        <file>pic/cloud.png</file>
+        <file>qml/startup.qml</file>
+    </qresource>
+</RCC>
