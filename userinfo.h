@@ -6,15 +6,34 @@
 class UserInfo: public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(int userId MEMBER m_uUserId NOTIFY userIdChanged)
-    Q_PROPERTY(QString userName MEMBER m_strUserName NOTIFY userNameChanged)
-    Q_PROPERTY(QString avatar MEMBER m_strAvatar NOTIFY avatarChanged)
-    Q_PROPERTY(int gender MEMBER m_uGender NOTIFY genderChanged)
-    Q_PROPERTY(QString mail MEMBER m_strMail NOTIFY mailChanged)
-    Q_PROPERTY(QString phone MEMBER m_strPhone NOTIFY phoneChanged)
+    Q_PROPERTY(int userId READ getUserId WRITE setUserId NOTIFY userIdChanged)
+    Q_PROPERTY(QString userName READ getUserName WRITE setUserName NOTIFY userNameChanged)
+    Q_PROPERTY(QString avatar READ getAvatar WRITE setAvatar NOTIFY avatarChanged)
+    Q_PROPERTY(int gender READ getGender WRITE setGender NOTIFY genderChanged)
+    Q_PROPERTY(QString mail READ getMail WRITE setMail NOTIFY mailChanged)
+    Q_PROPERTY(QString phone READ getPhone WRITE setPhone  NOTIFY phoneChanged)
 
 public:
     explicit UserInfo(QObject *parent = nullptr);
+
+    //  userId
+    int getUserId();
+    void setUserId(int userId);
+    //  userName
+    QString getUserName();
+    void setUserName(const QString &userName);
+    //  avatar
+    QString getAvatar();
+    void setAvatar(const QString &avatar);
+    //  gender
+    int getGender();
+    void setGender(int gender);
+    //  mail
+    QString getMail();
+    void setMail(const QString &mail);
+    // phone
+    QString getPhone();
+    void setPhone(const QString &phone);
 
 signals:
     void userIdChanged();
@@ -24,13 +43,11 @@ signals:
     void mailChanged();
     void phoneChanged();
 
-public:
-    bool m_isOk;
-    QString m_errMsg;
-    uint64_t m_uUserId;
+protected:
+    int m_nUserId;
     QString m_strUserName;
     QString m_strAvatar;
-    uint8_t m_uGender;
+    int m_nGender;
     QString m_strMail;
     QString m_strPhone;
 };

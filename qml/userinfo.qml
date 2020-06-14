@@ -9,7 +9,9 @@ Window {
     id: window
 
     //  2.property declarations
-    property UserInfo userInfo: null
+    property UserInfo userInfo: UserInfo{}
+    property ErrMsg errMsg: ErrMsg{}
+    property LoginOut loginOut: LoginOut{}
 
     //  3.signal declarations
 
@@ -20,7 +22,7 @@ Window {
         target: mouseArea
         onClicked: {
             var isOk;
-            isOk = loginOut.login(userInfo)
+            isOk = loginOut.login(HttpClientMgr, userInfo, errMsg)
             console.log(isOk)
             console.log(userInfo.userId)
             console.log(userInfo.userName)

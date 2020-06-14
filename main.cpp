@@ -1,6 +1,6 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-#include "qmlRegister.h"
+#include "qmlregister.h"
 #include "imageprovider.h"
 #include "imageproviderbridge.h"
 #include <cpprest/http_client.h>
