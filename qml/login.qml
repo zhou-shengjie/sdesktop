@@ -12,12 +12,20 @@ Window {
     property Captcha captcha: Captcha {}
     property ErrMsg errMsg: ErrMsg{}
     property GetCaptchaResponse getCaptchaResp: GetCaptchaResponse {}
+    property UserInfo userInfo: UserInfo{}
+    property LoginOut loginOut: LoginOut{}
 
     //  3.signal declarations
 
     //  4.JavaScript functions
     function login() {
-
+        var isOk;
+        isOk = loginOut.login(HttpClientMgr, userInfo, errMsg, "zhoushengjie", "YsV9mOVNmo7d0Vx9qjU6NCC1NAV1/Q7ENtX1Wn+Y3BGuJVUpTkyev0vxJNzpdwAzHT3zBfqxZNBMI3RvI22FXHoM/hFctqt05XUzDBL+O6H4ykT8uEgNmP6gHPiXmIRYwOU27NG00cDcF7KA4lgOH2LoAY2GaREbppKMrbFn1Qg=")
+        if (isOk === true) {
+            var component = Qt.createComponent("qrc:/qml/userinfo.qml");
+            var window = component.createObject(parent, {userInfo: userInfo});
+            window.show()
+        }
     }
 
     function refreshCaptcha() {
@@ -56,9 +64,7 @@ Window {
     Connections {
         target: button_login
         onClicked: {
-            var component = Qt.createComponent("qrc:/qml/userinfo.qml");
-            var window    = component.createObject();
-            window.show()
+            login()
         }
     }
 

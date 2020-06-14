@@ -14,14 +14,21 @@ LoginOut::LoginOut(QObject *parent) : QObject(parent)
 
 }
 
-bool LoginOut::login(HttpClientMgr *pHttpClient, UserInfo *userInfo, ErrMsg *errMsg)
+bool LoginOut::login(HttpClientMgr *pHttpClient, UserInfo *userInfo, ErrMsg *errMsg, const QString &account, const QString &password)
 {
+    Q_ASSERT(pHttpClient != nullptr);
+    Q_ASSERT(userInfo != nullptr);
+    Q_ASSERT(errMsg != nullptr);
+    if (pHttpClient == nullptr || userInfo == nullptr || errMsg == nullptr) {
+        return false;
+    }
+
     //  获取验证码
     auto httpClient = pHttpClient->getHttpClient();
     uri_builder builder(U("/account/v1/signin"));
     json::value requestBody = json::value::object();
-    requestBody[U("account")] = json::value(U("zhoushengjie"));
-    requestBody[U("password")] = json::value(U("YsV9mOVNmo7d0Vx9qjU6NCC1NAV1/Q7ENtX1Wn+Y3BGuJVUpTkyev0vxJNzpdwAzHT3zBfqxZNBMI3RvI22FXHoM/hFctqt05XUzDBL+O6H4ykT8uEgNmP6gHPiXmIRYwOU27NG00cDcF7KA4lgOH2LoAY2GaREbppKMrbFn1Qg="));
+    requestBody[U("account")] = json::value(utility::conversions::to_string_t(account.toStdString()));
+    requestBody[U("password")] = json::value(utility::conversions::to_string_t(password.toStdString()));
     pplx::task<void> loginTask = httpClient->request(methods::POST, builder.to_string(), requestBody).then([](http_response response){
         if (response.status_code() != 200) {
             //  TODO : 包装异常对象

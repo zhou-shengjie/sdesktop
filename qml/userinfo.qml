@@ -9,26 +9,12 @@ Window {
     id: window
 
     //  2.property declarations
-    property UserInfo userInfo: UserInfo{}
-    property ErrMsg errMsg: ErrMsg{}
-    property LoginOut loginOut: LoginOut{}
-
+    property UserInfo userInfo: null
     //  3.signal declarations
 
     //  4.JavaScript functions
 
     //  6.child objects
-    Connections {
-        target: mouseArea
-        onClicked: {
-            var isOk;
-            isOk = loginOut.login(HttpClientMgr, userInfo, errMsg)
-            console.log(isOk)
-            console.log(userInfo.userId)
-            console.log(userInfo.userName)
-        }
-    }
-
     Item {
         id: item_userInfo
         anchors.rightMargin: 0
@@ -156,7 +142,7 @@ Window {
     //  5.object properties
     width: 400
     height: 500
-
+    title: qsTr("用户信息")
     //  7.states
 
     //  8.transitions
