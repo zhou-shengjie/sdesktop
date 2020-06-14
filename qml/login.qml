@@ -5,17 +5,62 @@ import QtQuick.Layouts 1.0
 import Sjyun.Desktop 1.0
 
 Window {
+    //  1.id
     id: loginWindow
+
+    //  2.property declarations
+    property Captcha captcha: Captcha {}
+    property ErrMsg errMsg: ErrMsg{}
+    property GetCaptchaResponse getCaptchaResp: GetCaptchaResponse {}
+
+    //  3.signal declarations
+
+    //  4.JavaScript functions
+    function login() {
+
+    }
+
+    function refreshCaptcha() {
+        var isOk = captcha.getCaptcha(HttpClientMgr, getCaptchaResp, errMsg);
+        if (isOk === false) {
+            return
+        }
+        ImageProviderBridge.addImage(getCaptchaResp.captchaId, getCaptchaResp.captchaImg);
+        image_captcha.source = "image://imageProvider/" + getCaptchaResp.captchaId;
+        ImageProviderBridge.deleteImage(getCaptchaResp.captchaId)
+    }
+
+    //  5.object properties
     visible: true
     width: 350
     height: 600
-    property Captcha captcha: Captcha {
-    }
+
     title: qsTr("瞬捷云登录")
     maximumHeight: height
     maximumWidth: width
     minimumHeight: height
     minimumWidth: width
+
+    //  6.child objects
+    Component.onCompleted: {
+        //refreshCaptcha()
+    }
+
+    Connections {
+        target: mouseArea_captcha
+        onClicked: {
+            refreshCaptcha()
+        }
+    }
+
+    Connections {
+        target: button_login
+        onClicked: {
+            var component = Qt.createComponent("qrc:/qml/userinfo.qml");
+            var window    = component.createObject();
+            window.show()
+        }
+    }
 
     Image {
         id: image_loginBg
@@ -170,20 +215,8 @@ Window {
 
     }
 
-    Connections {
-        target: mouseArea_captcha
-        onClicked: {
-            var getCaptchaResp = captcha.getCaptcha(HttpClientMgr.getMgr());
-            if (getCaptchaResp === false) {
-                return
-            }
-            ImageProviderBridge.addImage(getCaptchaResp.captchaId, getCaptchaResp.captchaImg);
-            image_captcha.source = "image://imageProvider/" + getCaptchaResp.captchaId;
-        }
-    }
+    //  7.states
 
-    function login() {
-
-    }
+    //  8.transitions
 
 }

@@ -5,24 +5,26 @@
 #include <QPixmap>
 
 class HttpClientMgr;
+class ErrMsg;
 
-class GetCaptchaResponse
+class GetCaptchaResponse: public QObject
 {
-    Q_GADGET
-    Q_PROPERTY(bool isOk MEMBER m_isOk)
-    Q_PROPERTY(QString errMsg MEMBER m_errMsg)
+    Q_OBJECT
     Q_PROPERTY(QPixmap captchaImg READ getCaptchaImg)
     Q_PROPERTY(QString captchaId MEMBER m_captchaId)
 
 public:
-    GetCaptchaResponse() = default;
+    GetCaptchaResponse(QObject *parent = nullptr)
+        :QObject(parent)
+    {
+
+    }
+
     QPixmap getCaptchaImg() {
         return m_captchaImg;
     }
 
 public:
-    bool m_isOk;
-    QString m_errMsg;
     QPixmap m_captchaImg;
     QString m_captchaId;
 };
@@ -32,10 +34,7 @@ class Captcha : public QObject
     Q_OBJECT
 public:
     explicit Captcha(QObject *parent = nullptr);
-    Q_INVOKABLE GetCaptchaResponse getCaptcha(const HttpClientMgr* pHttpClient);
-
-signals:
-    void getCaptchaFinished(bool isOk);
+    Q_INVOKABLE bool getCaptcha(HttpClientMgr* pHttpClient, GetCaptchaResponse *pResp, ErrMsg *pErrMsg);
 };
 
 #endif // CAPTCHA_H

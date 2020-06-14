@@ -7,11 +7,6 @@ void HttpClientMgr::setHost(QString host)
     m_pHttpClient = std::make_shared<web::http::client::http_client>(uHost);
 }
 
-const HttpClientMgr *HttpClientMgr::getMgr()
-{
-    return this;
-}
-
 std::shared_ptr<web::http::client::http_client> HttpClientMgr::getHttpClient() const
 {
     if (m_pHttpClient != nullptr){

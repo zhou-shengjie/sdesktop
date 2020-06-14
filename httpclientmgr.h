@@ -10,7 +10,6 @@ class HttpClientMgr : public QObject
     Q_OBJECT
 public:
     Q_INVOKABLE void setHost(QString host);
-    Q_INVOKABLE const HttpClientMgr *getMgr();
     std::shared_ptr<web::http::client::http_client> getHttpClient() const;
 
 signals:

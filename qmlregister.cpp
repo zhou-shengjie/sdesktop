@@ -2,8 +2,11 @@
 #include <QQmlApplicationEngine>
 #include "globalconfig.h"
 #include "httpclientmgr.h"
-#include "qmlRegister.h"
+#include "qmlregister.h"
 #include "captcha.h"
+#include "userinfo.h"
+#include "loginout.h"
+#include "errmsg.h"
 
 //  registe qml object
 void registerQmlObject()
@@ -16,6 +19,11 @@ void registerQmlObject()
 
     //  type
     qmlRegisterType<Captcha>("Sjyun.Desktop", 1, 0, "Captcha");
-    qRegisterMetaType<const HttpClientMgr*>("const HttpClientMgr*");
-    qRegisterMetaType<GetCaptchaResponse>("GetCaptchaResponse");
+    qmlRegisterType<LoginOut>("Sjyun.Desktop", 1, 0, "LoginOut");
+    qmlRegisterType<UserInfo>("Sjyun.Desktop", 1, 0, "UserInfo");
+    qmlRegisterType<GetCaptchaResponse>("Sjyun.Desktop", 1, 0, "GetCaptchaResponse");
+    qmlRegisterType<ErrMsg>("Sjyun.Desktop", 1, 0, "ErrMsg");
+
+    //  meta type
+
 }

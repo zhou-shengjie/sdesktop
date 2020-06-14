@@ -29,8 +29,8 @@ find_package(cpprestsdk CONFIG REQUIRED)
 
 add_executable(sdesktop
   main.cpp
-  loginoutmgr.h
-  loginoutmgr.cpp
+  loginout.h
+  loginout.cpp
   globalconfig.h
   globalconfig.cpp
   captcha.cpp
@@ -43,6 +43,10 @@ add_executable(sdesktop
   imageprovider.cpp
   imageproviderbridge.h
   imageproviderbridge.cpp
+  userinfo.h
+  userinfo.cpp
+  errmsg.h
+  errmsg.cpp
   sdesktop.qrc
 )
 

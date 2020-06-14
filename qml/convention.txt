@@ -1,0 +1,8 @@
+//  1.id
+//  2.property declarations
+//  3.signal declarations
+//  4.JavaScript functions
+//  5.object properties
+//  6.child objects
+//  7.states
+//  8.transitions
