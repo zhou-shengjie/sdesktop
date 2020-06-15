@@ -73,20 +73,8 @@ bool Captcha::getCaptcha(HttpClientMgr* pHttpClient, GetCaptchaResponse *pResp, 
     }
     catch(std::exception &e)
     {
-        //  TODO : 日志记录
-
-        pErrMsg->m_isOk = false;
-        //  SExpection
-        std::exception *p = &e;
-        SException *sExpection = dynamic_cast<SException *>(p);
-        if (sExpection != nullptr) {
-            pErrMsg->m_result = sExpection->getResult();
-            pErrMsg->m_errMsg = sExpection->getMsg();
-            return false;
-        }
-        //  std::exception
-        pErrMsg->m_result = QString::fromStdString(e.what());
-        return false;
+       Exception2ErrMsg(e, pErrMsg);
+       return false;
     }
     pResp->m_captchaImg = captchaPixmap;
     return true;

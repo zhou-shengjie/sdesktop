@@ -20,8 +20,8 @@ public:
     SException(const std::string &result, const std::string &msg);
     void setResult(const std::string &result);
     void setMsg(const std::string &msg);
-    QString getResult();
-    QString getMsg();
+    QString getResult() const;
+    QString getMsg() const;
     virtual char const* what() const;
 
     public:

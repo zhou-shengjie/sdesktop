@@ -3,7 +3,7 @@
 #include "errmsg.h"
 #include "httpclientmgr.h"
 #include <cpprest/http_client.h>
-#include <QDebug>
+#include "sexception.h"
 
 using namespace web;                        // Common features like URIs.
 using namespace web::http;                  // Common HTTP functionality
@@ -25,20 +25,17 @@ bool LoginOut::login(HttpClientMgr *pHttpClient, UserInfo *userInfo, ErrMsg *err
 
     //  获取验证码
     auto httpClient = pHttpClient->getHttpClient();
-    uri_builder builder(U("/account/v1/signin"));
+    utility::string_t loginUrl(U("/account/v1/signin"));
+    uri_builder builder(loginUrl);
     json::value requestBody = json::value::object();
     requestBody[U("account")] = json::value(utility::conversions::to_string_t(account.toStdString()));
     requestBody[U("password")] = json::value(utility::conversions::to_string_t(password.toStdString()));
-    pplx::task<void> loginTask = httpClient->request(methods::POST, builder.to_string(), requestBody).then([](http_response response){
+    pplx::task<void> loginTask = httpClient->request(methods::POST, builder.to_string(), requestBody).then([=](http_response response){
         if (response.status_code() != 200) {
-            //  TODO : 包装异常对象
-            throw "/account/v1/login is not 200";
+            SException::throw_parse_api_error_exception(response, loginUrl);
         }
         return response.extract_json();
     }).then([=](json::value value){
-        if (value.is_object() == false) {
-            throw "response is not a object";
-        }
         json::object o = value.as_object();
         auto userId = o[U("user_id")].as_integer();
         userInfo->setUserId(userId);
@@ -56,10 +53,8 @@ bool LoginOut::login(HttpClientMgr *pHttpClient, UserInfo *userInfo, ErrMsg *err
 
     try {
         loginTask.get();
-    } catch (std::string &e) {
-        qDebug() << QString::fromStdString(e);
-        errMsg->m_isOk = false;
-        errMsg->m_errMsg = QString::fromStdString(e);
+    } catch (std::exception &e) {
+        Exception2ErrMsg(e, errMsg);
         return false;
     }
     return true;

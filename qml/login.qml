@@ -26,6 +26,11 @@ Window {
             var component = Qt.createComponent("qrc:/qml/userinfo.qml");
             var window = component.createObject(parent, {userInfo: userInfo});
             window.show()
+        } else {
+            messageDialog_loginFailed.text = errMsg.result
+            messageDialog_loginFailed.detailedText = errMsg.errMsg
+            messageDialog_loginFailed.open()
+            return
         }
     }
 
@@ -228,6 +233,12 @@ Window {
     MessageDialog {
         id: messageDialog_getCaptchaFailed
         title: qsTr("获取验证码失败")
+        standardButtons: StandardButton.Ok
+    }
+
+    MessageDialog {
+        id: messageDialog_loginFailed
+        title: qsTr("登录失败")
         standardButtons: StandardButton.Ok
     }
 

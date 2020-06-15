@@ -22,4 +22,6 @@ public:
 
 };
 
+void Exception2ErrMsg(const std::exception &e, ErrMsg *pErrMsg);
+
 #endif // ERRMSG_H

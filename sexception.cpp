@@ -41,12 +41,12 @@ void SException::setMsg(const std::string &errMsg)
     m_msg = errMsg;
 }
 
-QString SException::getResult()
+QString SException::getResult() const
 {
     return QString::fromStdString(m_result);
 }
 
-QString SException::getMsg()
+QString SException::getMsg() const
 {
     return QString::fromStdString(m_msg);
 }
