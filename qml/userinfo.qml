@@ -134,11 +134,6 @@ Window {
         }
     }
 
-    MouseArea {
-        id: mouseArea
-        anchors.fill: parent
-    }
-
     //  5.object properties
     width: 400
     height: 500

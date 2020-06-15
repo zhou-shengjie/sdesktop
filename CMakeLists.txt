@@ -26,6 +26,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt5 COMPONENTS Core Quick REQUIRED)
 find_package(cpprestsdk CONFIG REQUIRED)
+find_package(OpenSSL REQUIRED)
 
 add_executable(sdesktop
   main.cpp
@@ -56,4 +57,4 @@ target_compile_definitions(sdesktop
   PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
 
 target_link_libraries(sdesktop
-  PRIVATE Qt5::Core Qt5::Quick cpprestsdk::cpprest)
+  PRIVATE Qt5::Core Qt5::Quick cpprestsdk::cpprest OpenSSL::SSL OpenSSL::Crypto)

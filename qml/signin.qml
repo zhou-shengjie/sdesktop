@@ -19,7 +19,7 @@ Window {
     //  3.signal declarations
 
     //  4.JavaScript functions
-    function login() {
+    function signin() {
         var isOk;
         isOk = loginOut.login(HttpClientMgr, userInfo, errMsg, "zhoushengjie", "YsV9mOVNmo7d0Vx9qjU6NCC1NAV1/Q7ENtX1Wn+Y3BGuJVUpTkyev0vxJNzpdwAzHT3zBfqxZNBMI3RvI22FXHoM/hFctqt05XUzDBL+O6H4ykT8uEgNmP6gHPiXmIRYwOU27NG00cDcF7KA4lgOH2LoAY2GaREbppKMrbFn1Qg=")
         if (isOk === true) {
@@ -45,6 +45,12 @@ Window {
         ImageProviderBridge.addImage(getCaptchaResp.captchaId, getCaptchaResp.captchaImg);
         image_captcha.source = "image://imageProvider/" + getCaptchaResp.captchaId;
         ImageProviderBridge.deleteImage(getCaptchaResp.captchaId)
+    }
+
+    function signup() {
+        var component = Qt.createComponent("qrc:/qml/signup.qml");
+        var window = component.createObject(parent, {userInfo: userInfo});
+        window.show()
     }
 
     //  5.object properties
@@ -73,7 +79,7 @@ Window {
     Connections {
         target: button_login
         onClicked: {
-            login()
+            signin()
         }
     }
 
@@ -171,7 +177,7 @@ Window {
                     sourceSize.height: 80
                     sourceSize.width: 240
                     clip: false
-                    fillMode: Image.PreserveAspectFit
+                    fillMode: Image.Stretch
                     source: "../pic/code.png"
                 }
 
@@ -184,8 +190,8 @@ Window {
                     anchors.fill: parent
                 }
             }
-
         }
+
 
         Button {
             id: button_login
@@ -197,6 +203,25 @@ Window {
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
         }
 
+        RowLayout {
+            id: rowlayout_signup
+            width: 290
+            height: 40
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            Text {
+                id: text_signup
+                color: "#2a2222"
+                text: qsTr("注册")
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
+                font.family: "Microsoft Yahei"
+
+                MouseArea {
+                    id: mouseArea_signup
+                    anchors.fill: parent
+                }
+            }
+        }
     }
 
     ColumnLayout {
@@ -240,6 +265,11 @@ Window {
         id: messageDialog_loginFailed
         title: qsTr("登录失败")
         standardButtons: StandardButton.Ok
+    }
+
+    Connections {
+        target: mouseArea_signup
+        onClicked: signup()
     }
 
     //  7.states

@@ -1,10 +1,11 @@
 <RCC>
     <qresource prefix="/">
-        <file>qml/login.qml</file>
+        <file>qml/signin.qml</file>
         <file>pic/code.png</file>
         <file>pic/loginBg.jpg</file>
         <file>pic/cloud.png</file>
         <file>qml/startup.qml</file>
         <file>qml/userinfo.qml</file>
+        <file>qml/signup.qml</file>
     </qresource>
 </RCC>
