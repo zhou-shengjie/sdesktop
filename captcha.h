@@ -14,15 +14,9 @@ class GetCaptchaResponse: public QObject
     Q_PROPERTY(QString captchaId MEMBER m_captchaId)
 
 public:
-    GetCaptchaResponse(QObject *parent = nullptr)
-        :QObject(parent)
-    {
+    GetCaptchaResponse(QObject *parent = nullptr);
+    QPixmap getCaptchaImg();
 
-    }
-
-    QPixmap getCaptchaImg() {
-        return m_captchaImg;
-    }
 
 public:
     QPixmap m_captchaImg;

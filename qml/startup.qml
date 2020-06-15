@@ -23,8 +23,8 @@ Item{
             var host;
             host = GlobalConfig.getString("host");
             HttpClientMgr.setHost(host);
-            var component = Qt.createComponent("qrc:/qml/login.qml");
-            var window    = component.createObject();
+            var loginComp = Qt.createComponent("qrc:/qml/login.qml");
+            var loginWindow = loginComp.createObject();
         }
     }
 }

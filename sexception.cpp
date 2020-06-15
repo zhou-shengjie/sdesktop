@@ -1,13 +1,13 @@
 #include "sexception.h"
-#include <cpprest/details/basic_types.h>
 
 
-std::function<void(web::http::http_response response, utility::string_t url)> SExceptionBase::throw_parse_api_error_exception = [](web::http::http_response response, utility::string_t url){
+std::function<void(const web::http::http_response &response, const utility::string_t &url)>
+SException::throw_parse_api_error_exception = [](web::http::http_response response, utility::string_t url){
     //  解析apiServer返回的错误
     SApiException exception;
     pplx::task<web::json::value> getErrTask = response.extract_json();
     try {
-        web::json::value value = getErrTask.get();
+        web::json::value value = getErrTask.get();  //  noexcept(false)
         //  解析错误成功
         exception.setUrl(url);
         exception.setHttpCode(response.status_code());
@@ -25,23 +25,33 @@ std::function<void(web::http::http_response response, utility::string_t url)> SE
     throw exception;
 };
 
-SExceptionBase::SExceptionBase()
+SException::SException(const std::string &result, const std::string &msg)
+    :m_result(result),m_msg(msg)
 {
-    //m_json = json::value::object();
+
 }
 
-void SExceptionBase::setResult(const std::string &result)
+void SException::setResult(const std::string &result)
 {
     m_result = result;
 }
 
-void SExceptionBase::setMsg(const std::string &errMsg)
+void SException::setMsg(const std::string &errMsg)
 {
     m_msg = errMsg;
-    //m_json[U("msg")] = json::value(utility::conversions::to_string_t(errMsg));
 }
 
-char const* SExceptionBase::what() const
+QString SException::getResult()
+{
+    return QString::fromStdString(m_result);
+}
+
+QString SException::getMsg()
+{
+    return QString::fromStdString(m_msg);
+}
+
+char const* SException::what() const
 {
     return m_result.c_str();
 }
@@ -49,11 +59,9 @@ char const* SExceptionBase::what() const
 void SApiException::setHttpCode(int httpCode)
 {
     m_httpCode = httpCode;
-    //m_json[U("httpCode")] = json::value(httpCode);
 }
 
 void SApiException::setUrl(const utility::string_t &url)
 {
     m_url = utility::conversions::to_utf8string(url);
-    //m_json[U("url")] = json::value(url);
 }

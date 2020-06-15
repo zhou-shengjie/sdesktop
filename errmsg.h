@@ -7,6 +7,7 @@ class ErrMsg : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(bool isOk MEMBER m_isOk)
+    Q_PROPERTY(QString result MEMBER m_result)
     Q_PROPERTY(QString errMsg MEMBER m_errMsg)
 
 public:
@@ -16,6 +17,7 @@ signals:
 
 public:
     bool m_isOk;
+    QString m_result;
     QString m_errMsg;
 
 };

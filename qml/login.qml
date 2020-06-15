@@ -2,6 +2,7 @@ import QtQuick 2.14
 import QtQuick.Window 2.14
 import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.0
+import QtQuick.Dialogs 1.3
 import Sjyun.Desktop 1.0
 
 Window {
@@ -31,6 +32,9 @@ Window {
     function refreshCaptcha() {
         var isOk = captcha.getCaptcha(HttpClientMgr, getCaptchaResp, errMsg);
         if (isOk === false) {
+            messageDialog_getCaptchaFailed.text = errMsg.result
+            messageDialog_getCaptchaFailed.detailedText = errMsg.errMsg
+            messageDialog_getCaptchaFailed.open();
             return
         }
         ImageProviderBridge.addImage(getCaptchaResp.captchaId, getCaptchaResp.captchaImg);
@@ -219,6 +223,12 @@ Window {
             font.pixelSize: 12
         }
 
+    }
+
+    MessageDialog {
+        id: messageDialog_getCaptchaFailed
+        title: qsTr("获取验证码失败")
+        standardButtons: StandardButton.Ok
     }
 
     //  7.states
