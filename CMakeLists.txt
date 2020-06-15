@@ -47,6 +47,8 @@ add_executable(sdesktop
   userinfo.cpp
   errmsg.h
   errmsg.cpp
+  sexception.h
+  sexception.cpp
   sdesktop.qrc
 )
 
