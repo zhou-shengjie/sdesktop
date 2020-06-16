@@ -4,6 +4,8 @@
 #include "httpclientmgr.h"
 #include <cpprest/http_client.h>
 #include "sexception.h"
+#include "crypto.h"
+#include <QCryptographicHash>
 
 using namespace web;                        // Common features like URIs.
 using namespace web::http;                  // Common HTTP functionality
@@ -23,16 +25,28 @@ bool LoginOut::login(HttpClientMgr *pHttpClient, UserInfo *userInfo, ErrMsg *err
         return false;
     }
 
-    //  获取验证码
+    //  获取公钥
+    QByteArray publicKey;
+    if (Crypto::getPublicKey(pHttpClient, publicKey) == false) {
+        return false;
+    }
+    //  密码sha1->toHex->公钥加密->base64
+    auto sha1 = QCryptographicHash::hash(password.toLatin1(), QCryptographicHash::Sha1).toHex();
+    QByteArray passwordWithEncrypt;
+    if (Crypto::rsaPublicEncrypt(publicKey, sha1, passwordWithEncrypt) == false) {
+        return false;
+    }
+
+    //  登录
     auto httpClient = pHttpClient->getHttpClient();
     utility::string_t loginUrl(U("/account/v1/signin"));
     uri_builder builder(loginUrl);
     json::value requestBody = json::value::object();
     requestBody[U("account")] = json::value(utility::conversions::to_string_t(account.toStdString()));
-    requestBody[U("password")] = json::value(utility::conversions::to_string_t(password.toStdString()));
+    requestBody[U("password")] = json::value(utility::conversions::to_string_t(passwordWithEncrypt.toStdString()));
     pplx::task<void> loginTask = httpClient->request(methods::POST, builder.to_string(), requestBody).then([=](http_response response){
         if (response.status_code() != 200) {
-            SException::throw_parse_api_error_exception(response, loginUrl);
+            SException::throw_http_code_not_ok_exception(response, loginUrl);
         }
         return response.extract_json();
     }).then([=](json::value value){

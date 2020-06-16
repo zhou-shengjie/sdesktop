@@ -2,7 +2,7 @@
 
 
 std::function<void(const web::http::http_response &response, const utility::string_t &url)>
-SException::throw_parse_api_error_exception = [](web::http::http_response response, utility::string_t url){
+SException::throw_http_code_not_ok_exception = [](web::http::http_response response, utility::string_t url){
     //  解析apiServer返回的错误
     SApiException exception;
     pplx::task<web::json::value> getErrTask = response.extract_json();

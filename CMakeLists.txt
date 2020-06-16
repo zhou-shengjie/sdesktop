@@ -50,6 +50,8 @@ add_executable(sdesktop
   errmsg.cpp
   sexception.h
   sexception.cpp
+  crypto.h
+  crypto.cpp
   sdesktop.qrc
 )
 

@@ -11,6 +11,7 @@
 #define HTTP_CODE_NOT_200 "http code is not 200."
 #define PIXMAP_IS_INVALID "pixmap is in valid."
 #define PARSE_API_ERROR_FAILED "parse api error failed."
+#define GET_PUBLIC_KEY_FAILED "get public key failed."
 
 
 class SException : public std::exception
@@ -29,7 +30,7 @@ public:
     //  exception:
     //  1.解析apiserver错误成功
     //  2.解析apiserver错误失败，result:PARSE_API_ERROR_FAILED
-    static std::function<void(const web::http::http_response &response, const utility::string_t &url)> throw_parse_api_error_exception;
+    static std::function<void(const web::http::http_response &response, const utility::string_t &url)> throw_http_code_not_ok_exception;
 
 protected:
         std::string m_result;

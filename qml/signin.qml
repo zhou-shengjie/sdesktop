@@ -21,7 +21,7 @@ Window {
     //  4.JavaScript functions
     function signin() {
         var isOk;
-        isOk = loginOut.login(HttpClientMgr, userInfo, errMsg, "zhoushengjie", "YsV9mOVNmo7d0Vx9qjU6NCC1NAV1/Q7ENtX1Wn+Y3BGuJVUpTkyev0vxJNzpdwAzHT3zBfqxZNBMI3RvI22FXHoM/hFctqt05XUzDBL+O6H4ykT8uEgNmP6gHPiXmIRYwOU27NG00cDcF7KA4lgOH2LoAY2GaREbppKMrbFn1Qg=")
+        isOk = loginOut.login(HttpClientMgr, userInfo, errMsg, textField_account.text, textField_passwd.text)
         if (isOk === true) {
             var component = Qt.createComponent("qrc:/qml/userinfo.qml");
             var window = component.createObject(parent, {userInfo: userInfo});
@@ -49,7 +49,7 @@ Window {
 
     function signup() {
         var component = Qt.createComponent("qrc:/qml/signup.qml");
-        var window = component.createObject(parent, {userInfo: userInfo});
+        var window = component.createObject(parent);
         window.show()
     }
 
@@ -132,6 +132,7 @@ Window {
         TextField {
             id: textField_account
             width: parent.width - 60
+            text: ""
             font.family: "Microsoft YaHei"
             placeholderText: qsTr("账号")
             anchors.horizontalCenter: parent.horizontalCenter
@@ -142,6 +143,7 @@ Window {
             id: textField_passwd
             width: parent.width - 60
             height: 40
+            text: ""
             echoMode: TextInput.Password
             font.family: "Microsoft YaHei"
             placeholderText: qsTr("密码")

@@ -40,7 +40,7 @@ bool Captcha::getCaptcha(HttpClientMgr* pHttpClient, GetCaptchaResponse *pResp, 
     uri_builder builder(getCaptchaUrl);
     pplx::task<QPixmap> getCaptchaRequest = httpClient->request(methods::GET, builder.to_string()).then([=](http_response response){
         if (response.status_code() != 200){
-            SException::throw_parse_api_error_exception(response, getCaptchaUrl);
+            SException::throw_http_code_not_ok_exception(response, getCaptchaUrl);
         }
         return response.extract_json();
     }).then([=, &getCaptchaFile](web::json::value value){
@@ -54,7 +54,7 @@ bool Captcha::getCaptcha(HttpClientMgr* pHttpClient, GetCaptchaResponse *pResp, 
         return httpClient->request(methods::GET, builder.to_string());
     }).then([=](http_response response){
         if (response.status_code() != 200){
-            SException::throw_parse_api_error_exception(response, getCaptchaFile);
+            SException::throw_http_code_not_ok_exception(response, getCaptchaFile);
         }
         return response.extract_vector();
     }).then([](std::vector<unsigned char> vec){
