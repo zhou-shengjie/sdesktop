@@ -4,7 +4,7 @@
 #include <cpprest/http_client.h>
 #include "httpclientmgr.h"
 #include "sexception.h"
-#include <QDebug>
+#include <gsl/gsl>
 
 using namespace web;                        // Common features like URIs.
 using namespace web::http;                  // Common HTTP functionality
@@ -44,6 +44,12 @@ bool Crypto::rsaPublicEncrypt(const QByteArray &publicKey, const QByteArray &ori
     BIO * bioMemPublicKey = nullptr;
     RSA *publicRsa = nullptr;
     unsigned char *pCipeherText = nullptr;
+    //  defer
+    auto _ = gsl::finally([&](){
+        if (bioMemPublicKey != nullptr) BIO_free_all(bioMemPublicKey);
+        if (publicRsa != nullptr) RSA_free(publicRsa);
+        if (pCipeherText != nullptr) free(pCipeherText);
+    });
     //  创建publicKey的bio_mem_buf
     bioMemPublicKey = BIO_new_mem_buf(publicKey.data(), -1);
     if (bioMemPublicKey == nullptr) {
