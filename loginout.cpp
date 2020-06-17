@@ -16,22 +16,24 @@ LoginOut::LoginOut(QObject *parent) : QObject(parent)
 
 }
 
-bool LoginOut::login(HttpClientMgr *pHttpClient, UserInfo *userInfo, ErrMsg *errMsg, const QString &account, const QString &password)
+bool LoginOut::login(HttpClientMgr *pHttpClient, UserInfo *userInfo, ErrMsg *errMsg, LoginRequest *req)
 {
     Q_ASSERT(pHttpClient != nullptr);
     Q_ASSERT(userInfo != nullptr);
     Q_ASSERT(errMsg != nullptr);
-    if (pHttpClient == nullptr || userInfo == nullptr || errMsg == nullptr) {
+    Q_ASSERT(req != nullptr);
+    if (pHttpClient == nullptr || userInfo == nullptr || errMsg == nullptr || req == nullptr) {
         return false;
     }
 
     //  获取公钥
     QByteArray publicKey;
-    if (Crypto::getPublicKey(pHttpClient, publicKey) == false) {
+    int64_t id;
+    if (Crypto::getPublicKey(pHttpClient, publicKey, id) == false) {
         return false;
     }
     //  密码sha1->toHex->公钥加密->base64
-    auto sha1 = QCryptographicHash::hash(password.toLatin1(), QCryptographicHash::Sha1).toHex();
+    auto sha1 = QCryptographicHash::hash(req->password.toLatin1(), QCryptographicHash::Sha1).toHex();
     QByteArray passwordWithEncrypt;
     if (Crypto::rsaPublicEncrypt(publicKey, sha1, passwordWithEncrypt) == false) {
         return false;
@@ -42,8 +44,11 @@ bool LoginOut::login(HttpClientMgr *pHttpClient, UserInfo *userInfo, ErrMsg *err
     utility::string_t loginUrl(U("/account/v1/signin"));
     uri_builder builder(loginUrl);
     json::value requestBody = json::value::object();
-    requestBody[U("account")] = json::value(utility::conversions::to_string_t(account.toStdString()));
+    requestBody[U("account")] = json::value(utility::conversions::to_string_t(req->account.toStdString()));
     requestBody[U("password")] = json::value(utility::conversions::to_string_t(passwordWithEncrypt.toStdString()));
+    requestBody[U("captcha_id")] = json::value(utility::conversions::to_string_t(req->captchaId.toStdString()));
+    requestBody[U("captcha_solution")] = json::value(utility::conversions::to_string_t(req->captchaSolution.toStdString()));
+    requestBody[U("crypto_id")] = json::value(id);
     pplx::task<void> loginTask = httpClient->request(methods::POST, builder.to_string(), requestBody).then([=](http_response response){
         if (response.status_code() != 200) {
             SException::throw_http_code_not_ok_exception(response, loginUrl);

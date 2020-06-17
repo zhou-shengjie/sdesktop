@@ -23,7 +23,9 @@ void registerQmlObject()
     qmlRegisterType<UserInfo>("Sjyun.Desktop", 1, 0, "UserInfo");
     qmlRegisterType<GetCaptchaResponse>("Sjyun.Desktop", 1, 0, "GetCaptchaResponse");
     qmlRegisterType<ErrMsg>("Sjyun.Desktop", 1, 0, "ErrMsg");
+    qmlRegisterType<LoginRequest>("Sjyun.Desktop", 1, 0, "LoginRequest");
 
     //  meta type
+
 
 }

@@ -15,13 +15,18 @@ Window {
     property GetCaptchaResponse getCaptchaResp: GetCaptchaResponse {}
     property UserInfo userInfo: UserInfo{}
     property LoginOut loginOut: LoginOut{}
+    property LoginRequest loginRequest: LoginRequest{}
 
     //  3.signal declarations
 
     //  4.JavaScript functions
     function signin() {
         var isOk;
-        isOk = loginOut.login(HttpClientMgr, userInfo, errMsg, textField_account.text, textField_passwd.text)
+        loginRequest.account = textField_account.text
+        loginRequest.captchaId = getCaptchaResp.captchaId
+        loginRequest.captchaSolution = textField_captcha.text
+        loginRequest.password = textField_passwd.text
+        isOk = loginOut.login(HttpClientMgr, userInfo, errMsg, loginRequest)
         if (isOk === true) {
             var component = Qt.createComponent("qrc:/qml/userinfo.qml");
             var window = component.createObject(parent, {userInfo: userInfo});

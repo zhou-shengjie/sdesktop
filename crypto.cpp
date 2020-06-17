@@ -15,7 +15,7 @@ Crypto::Crypto()
 
 }
 
-bool Crypto::getPublicKey(HttpClientMgr *pHttpClientMgr ,QByteArray &publicKey)
+bool Crypto::getPublicKey(HttpClientMgr *pHttpClientMgr ,QByteArray &publicKey, int64_t &id)
 {
     auto httpClient = pHttpClientMgr->getHttpClient();
     utility::string_t getPublicKeyUr(U("/encrypt/v1/publickey"));
@@ -24,10 +24,11 @@ bool Crypto::getPublicKey(HttpClientMgr *pHttpClientMgr ,QByteArray &publicKey)
             SException::throw_http_code_not_ok_exception(response, getPublicKeyUr);
         }
         return response.extract_json();
-    }).then([&publicKey](web::json::value value){
+    }).then([&publicKey,&id](web::json::value value){
         auto getPublicKeyResp = value.as_object();
         std::string pk = utility::conversions::to_utf8string(getPublicKeyResp[U("public_key")].as_string());
         publicKey = QByteArray::fromBase64(QString::fromStdString(pk).toLatin1());
+        id = getPublicKeyResp[U("id")].as_integer();
     });
 
     try {

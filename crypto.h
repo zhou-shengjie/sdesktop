@@ -10,7 +10,7 @@ class Crypto
 {
 public:
     Crypto();
-    static bool getPublicKey(HttpClientMgr *pHttpClientMgr ,QByteArray &publicKey);
+    static bool getPublicKey(HttpClientMgr *pHttpClientMgr ,QByteArray &publicKey, int64_t &id);
     static bool rsaPublicEncrypt(const QByteArray &publicKey, const QByteArray &original, QByteArray &cipherText);
 
 
