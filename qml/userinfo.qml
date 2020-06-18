@@ -6,7 +6,7 @@ import Sjyun.Desktop 1.0
 
 Window {
     //  1.id
-    id: window
+    id: window_userInfo
 
     //  2.property declarations
     property UserInfo userInfo: null
@@ -15,6 +15,13 @@ Window {
     //  4.JavaScript functions
 
     //  6.child objects
+    Connections {
+        target: window_userInfo
+        onClosing: function(close) {
+            window_userInfo.destroy()
+        }
+    }
+
     Item {
         id: item_userInfo
         anchors.rightMargin: 0

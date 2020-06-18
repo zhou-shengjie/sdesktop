@@ -75,6 +75,13 @@ Window {
     }
 
     Connections {
+        target: loginWindow
+        onClosing: function(close) {
+            loginWindow.destroy()
+        }
+    }
+
+    Connections {
         target: mouseArea_captcha
         onClicked: {
             refreshCaptcha()

@@ -40,6 +40,13 @@ Window {
         }
     }
 
+    Connections {
+        target: window_signup
+        onClosing: function(close){
+            window_signup.destroy()
+        }
+    }
+
     Column {
         id: column
         spacing: 15
